@@ -1,10 +1,6 @@
-############################################
-# Data Professor                           #
-# http://youtube.com/dataprofessor         #
-# http://github.com/dataprofessor          #
-# http://facebook.com/dataprofessor        #
-# https://www.instagram.com/data.professor #
-############################################
+# Data Professor
+# http://youtube.com/dataprofessor
+
 
 # Import libraries
 library(shiny)
@@ -19,10 +15,8 @@ TrainSet <- read.csv("training.csv", header = TRUE)
 TrainSet <- TrainSet[,-1]
 
 
-####################################
-# User interface                   #
-####################################
 
+# UI
 ui <- pageWithSidebar(
   
   # Page header
@@ -56,10 +50,8 @@ ui <- pageWithSidebar(
   )
 )
 
-####################################
-# Server                           #
-####################################
 
+# Server
 server<- function(input, output, session) {
   
   # Input Data
@@ -106,7 +98,6 @@ server<- function(input, output, session) {
   
 }
 
-####################################
-# Create the shiny app             #
-####################################
+
+# Create the shiny app
 shinyApp(ui = ui, server = server)

@@ -1,12 +1,8 @@
-############################################
-# Data Professor                           #
-# http://youtube.com/dataprofessor         #
-# http://github.com/dataprofessor          #
-# http://facebook.com/dataprofessor        #
-# https://www.instagram.com/data.professor #
-############################################
+# Data Professor
+# http://youtube.com/dataprofessor
 
-# Import libraries
+
+# Imports
 library(shiny)
 library(data.table)
 library(randomForest)
@@ -15,9 +11,9 @@ library(randomForest)
 model <- readRDS("model.rds")
 
 
-####################################
-# User interface                   #
-####################################
+
+# UI
+
 
 ui <- pageWithSidebar(
   
@@ -53,10 +49,8 @@ ui <- pageWithSidebar(
   )
 )
 
-####################################
-# Server                           #
-####################################
 
+# Server
 server<- function(input, output, session) {
   
   # Input Data
@@ -103,7 +97,6 @@ server<- function(input, output, session) {
   
 }
 
-####################################
-# Create the shiny app             #
-####################################
+
+# Create the shiny app
 shinyApp(ui = ui, server = server)

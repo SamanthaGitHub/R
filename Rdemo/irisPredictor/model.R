@@ -1,10 +1,8 @@
-####################################
-# Data Professor                   #
-# http://youtube.com/dataprofessor #
-# http://github.com/dataprofessor  #
-####################################
+# Data Professor
+# http://youtube.com/dataprofessor
 
-# Importing libraries
+
+# Imports
 library(RCurl) # for downloading the iris CSV file
 library(randomForest)
 library(caret)

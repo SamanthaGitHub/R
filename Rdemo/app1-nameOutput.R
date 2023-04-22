@@ -1,8 +1,7 @@
-####################################
-# Data Professor                   #
-# http://youtube.com/dataprofessor #
-# http://github.com/dataprofessor  #
-####################################
+# Data Professor
+# http://youtube.com/dataprofessor
+# http://github.com/dataprofessor
+
 
 # Modified from Winston Chang, 
 # https://shiny.rstudio.com/gallery/shiny-theme-selector.html
