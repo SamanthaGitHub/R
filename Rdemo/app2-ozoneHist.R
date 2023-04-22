@@ -7,10 +7,8 @@
 library(shiny)
 data(airquality)
 
-# Define UI for app that draws a histogram
+# UI
 ui <- fluidPage(
-  
-  # App title ----
   titlePanel("Ozone level!"),
   
   # Sidebar layout with input and output definitions
@@ -38,7 +36,7 @@ ui <- fluidPage(
   )
 )
 
-# Define server logic required to draw a histogram
+# Server
 server <- function(input, output) {
   
   
