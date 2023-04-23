@@ -13,6 +13,7 @@ library(shinythemes)
 library(DT)
 library(here)
 library(ggplot2)
+library(psych)
 
 fishData <- readRDS(here("fishData.RDS"))
 
@@ -32,7 +33,7 @@ ui <- fluidPage(
         # User input options for fish size
         checkboxGroupInput('size', "Size:",
                            c(Fry="fry", Parr="parr", Smolt="smolt")),
-        checkboxGroupInput('location', "Location:",
+        checkboxGroupInput(fishData$location, "Location:",
                            c('Main channel'="mainChannel", 'Flood plain'="floodPlain"))
         #actionButton()
       ),
@@ -49,7 +50,11 @@ ui <- fluidPage(
       ),
     
     # Descriptive stats
-    tabPanel('Descriptive Statistics', verbatimTextOutput("stats1")),
+    tabPanel('Descriptive Statistics',
+             verbatimTextOutput("stats1"),
+             verbatimTextOutput("stats2")
+             #verbatimTextOutput("stats3")
+             ),
     
     # Code summary
     tabPanel('Code Summary',
@@ -69,53 +74,69 @@ ui <- fluidPage(
 # Server
 server <- function(input, output) {
   
+  #x <- seq(0, 41, by=5)
   
-    x <- seq(0, 41, by=5)
-    
-    #FISH
-    # Fry
-    fry.geom <- reactive({
-      geom_boxplot(mapping = aes(x=fishData$fishLength[1:35], y=input$location), color="pink")
-    })
-    fry <- reactive({
-      if("fry" %in% input$size){
-        fry.geom()
-        }
-    })
-    
-    # Parr
-    parr.geom <- reactive({
-      geom_boxplot(mapping = aes(x=fishData$fishLength[36:113], y=input$location), color="red")
-    })
-    parr <- reactive({
-      if("parr" %in% input$size){
-        parr.geom()}
-    })
-    
-    # Smolt
-    smolt.geom <- reactive({
-      geom_boxplot(mapping = aes(x=fishData$fishLength[114:178], y=input$location), color="darkred")
-    })
-    smolt <- reactive({
-      if("smolt" %in% input$size){
-        smolt.geom()}
-    })
-    
-    
-    #LOCATION
-    #Main channel
-    mc.geom <- reactive({
-      geom_boxplot(mapping=aes(x, y=input$location))
-    })
-    mc <- reactive({
-      if("mainChannel" %in% input$location){
-        mc.geom()
-      }
-    })
-    
-  output$myPlot <- renderPlot({
-    ggplot() + fry() + parr() + smolt() + mc()
+  
+  #------------------------------------FISH------------------------------
+  
+  # Fry
+  fry.geom <- reactive({
+    geom_boxplot(mapping = aes(x=fishData$fishLength[1:35], y=input$location), color="pink")
   })
+  fry <- reactive({
+    if("fry" %in% input$size){
+      fry.geom()}
+  })
+  
+  # Parr
+  parr.geom <- reactive({
+    geom_boxplot(mapping = aes(x=fishData$fishLength[36:113], y=input$location), color="red")
+  })
+  parr <- reactive({
+    if("parr" %in% input$size){
+      parr.geom()}
+  })
+  
+  # Smolt
+  smolt.geom <- reactive({
+    geom_boxplot(mapping = aes(x=fishData$fishLength[114:178], y=input$location), color="darkred")
+  })
+  smolt <- reactive({
+    if("smolt" %in% input$size){
+      smolt.geom()}
+  })
+  
+  
+  #-[BROKEN]----------------------------------LOCATION----------------------------
+  
+  # Main channel
+  mainc.geom <- reactive({
+    geom_boxplot(mapping=aes(x=input$size, y=input$location))
+  })
+  mainc <- reactive({
+    if("mainChannel" %in% input$location){
+      mainc.geom()
+    }
+  })
+  
+  # Flood plain
+  floodp.geom <- reactive({
+    geom_boxplot(mapping=aes(x=input$size, y=input$location))
+  })
+  floodp <- reactive({
+    if("floodPlain" %in% input$location){
+      floodp.geom()
+    }
+  })
+    
+  #Boxplot ggplot output
+  output$myPlot <- renderPlot({
+    ggplot() + fry() + parr() + smolt() + mainc() + floodp() + 
+    labs(title='Boxplot', x='Length of fish (cm)', y='Location caught') +
+    theme(axis.text.y=element_text())
+  })
+  
+  
   
   # Table output
   output$fishTable <- renderDT({
@@ -133,6 +154,9 @@ server <- function(input, output) {
   # Descriptive Statistics
   output$stats1 <- renderPrint({
     summary(fishData)
+  })
+  output$stats2 <- renderPrint({
+    describeBy(fishData$fishLength, group=fishData$size)
   })
 }
 
