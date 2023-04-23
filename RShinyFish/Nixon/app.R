@@ -12,6 +12,7 @@ library(shiny)
 library(shinythemes)
 library(DT)
 library(here)
+library(ggplot2)
 
 fishData <- readRDS(here("fishData.RDS"))
 
@@ -29,8 +30,11 @@ ui <- fluidPage(
         tags$label(h4('Input Parameters')),
       
         # User input options for fish size
-        selectInput("size", "Size:", 
-                    c('All fish', Fry="fry", Parr="parr", Smolt="smolt"))
+        checkboxGroupInput('size', "Size:",
+                           c(Fry="fry", Parr="parr", Smolt="smolt")),
+        checkboxGroupInput('location', "Location:",
+                           c('Main channel'="mainChannel", 'Flood plain'="floodPlain"))
+        #actionButton()
       ),
       
       # Main panel boxplot
@@ -65,67 +69,52 @@ ui <- fluidPage(
 # Server
 server <- function(input, output) {
   
+  
+    x <- seq(0, 41, by=5)
+    
+    #FISH
+    # Fry
+    fry.geom <- reactive({
+      geom_boxplot(mapping = aes(x=fishData$fishLength[1:35], y=input$location), color="pink")
+    })
+    fry <- reactive({
+      if("fry" %in% input$size){
+        fry.geom()
+        }
+    })
+    
+    # Parr
+    parr.geom <- reactive({
+      geom_boxplot(mapping = aes(x=fishData$fishLength[36:113], y=input$location), color="red")
+    })
+    parr <- reactive({
+      if("parr" %in% input$size){
+        parr.geom()}
+    })
+    
+    # Smolt
+    smolt.geom <- reactive({
+      geom_boxplot(mapping = aes(x=fishData$fishLength[114:178], y=input$location), color="darkred")
+    })
+    smolt <- reactive({
+      if("smolt" %in% input$size){
+        smolt.geom()}
+    })
+    
+    
+    #LOCATION
+    #Main channel
+    mc.geom <- reactive({
+      geom_boxplot(mapping=aes(x, y=input$location))
+    })
+    mc <- reactive({
+      if("mainChannel" %in% input$location){
+        mc.geom()
+      }
+    })
+    
   output$myPlot <- renderPlot({
-    
-    # Boxplot output for fry sized fish
-    if(input$size == "fry"){
-      boxplot(fishLength[1:35]~location[1:35],
-              data = fishData,
-              main = "Fish Length Based on Location (fry)",
-              names = c("Flood Plain", "Main Channel"),
-              xlab = "Fish Length (cm)",
-              ylim = c(1, 41),
-              ylab = "Location",
-              col = "#ffd699",
-              border= "#cc6600",
-              horizontal = TRUE
-      )
-    }
-    
-    # Boxplot output for parr sized fish
-    else if(input$size == "parr"){
-      boxplot(fishLength[36:113]~location[36:113],
-              data = fishData,
-              main = "Fish Length Based on Location (parr)",
-              names = c("Flood Plain", "Main Channel"),
-              xlab = "Fish Length (cm)",
-              ylim = c(1, 41),
-              ylab = "Location",
-              col = "#ffad33",
-              border= "#804000",
-              horizontal = TRUE
-      )
-    }
-    
-    # Boxplot output for smolt sized fish
-    else if(input$size == "smolt"){
-      boxplot(fishLength[114:178]~location[114:178],
-              data = fishData,
-              main = "Fish Length Based on Location (smolt)",
-              names = c("Flood Plain", "Main Channel"),
-              xlab = "Fish Length (cm)",
-              ylim = c(1, 41),
-              ylab = "Location",
-              col = "#cc7a00",
-              border= "#331a00",
-              horizontal = TRUE
-      )
-    }
-    
-    # Boxplot output for all fish
-    else{
-      boxplot(fishLength~location,
-              data = fishData,
-              main = "Fish Length Based on Location of All Fish Sizes",
-              names = c("Flood Plain", "Main Channel"),
-              xlab = "Fish Length (cm)",
-              ylim = c(1, 41),
-              ylab = "Location",
-              col = "orange",
-              border= "brown",
-              horizontal = TRUE
-      )
-    }
+    ggplot() + fry() + parr() + smolt() + mc()
   })
   
   # Table output
