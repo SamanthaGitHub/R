@@ -26,6 +26,3 @@ print(myPlot2)
 # Cuts charted separately
 # this feature uses the same scale for all plots, making comparison easier
 myPlot2 + facet_wrap( ~ cut, ncol=3)
-
-
-# MIDWEST DATASET
