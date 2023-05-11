@@ -1,8 +1,3 @@
-n <- 10000
-x <- rnorm(n, mean=0, sd=1)
-mean(x)
-
-
 
 N <- 100000
 counter <- 0
@@ -14,3 +9,4 @@ for(i in rnorm(N)){
 answer <- counter / N
 answer
 #compare to 68.2% or 0.682
+#take away: a large sample size will produce a more accurate representation of the population
