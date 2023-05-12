@@ -51,4 +51,12 @@ z
 rep() # replicate
 
 rep(3,50)
-#replicate 3 50 times
+#replicate 3 (50 times)
+
+a <- rep(3,10)
+a
+
+rep("sam", 2)
+
+x <- c(80,20)
+rep(x,10) # 80, 20, 80, 20, .....
