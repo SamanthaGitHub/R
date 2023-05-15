@@ -60,3 +60,48 @@ rep("sam", 2)
 
 x <- c(80,20)
 rep(x,10) # 80, 20, 80, 20, .....
+
+
+
+
+
+
+# --------- VECTORIZED OPERATIONS ----------------
+# RECYCLING VECTORS: if adding a vector with less indexes to another,
+# and if the smaller is a multiple of the larger, R will recycle, filling
+# in the 'blanks' with the values of the smaller vector.
+# If not a multiple, R will still preform the operation with a warning.
+
+x <- rnorm(5)
+x
+
+# R-specific programming loop
+for(i in x){ # i assumes the value of the index in the vector
+  print(i)
+}
+print(x[1:5]) # prints as a vector
+print(x[1]) # prints the 1 value
+
+
+# conventional programming loop
+for(j in 1:5){ # j assumes the index of the value in the vector
+  print(x[j])
+}
+
+
+# -- R-specific v conventional --
+N <- 100
+a <- rnorm(N)
+b <- rnorm(N)
+
+
+
+
+# Vectorized
+c <- a * b
+
+# De-vectorized; takes longer to compute
+d <- rep(NA,N) # empty vector with allocated memory
+for(i in 1:N){
+  d[i] <- a[i] * b[i]
+}
