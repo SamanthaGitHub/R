@@ -29,3 +29,9 @@ head(stats2)
 stats2$MyCalc <- stats2$Birth.rate * stats2$Internet.users 
 head(stats2, n=10)
 
+#remove columns
+head(stats2)
+stats2$MyCalc <- NULL
+
+
+
