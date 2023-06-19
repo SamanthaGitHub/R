@@ -35,22 +35,6 @@ myPlot10 + geom_histogram(aes(fill=Genre), color="black") +
 
 #zoom on pretty plot to fix y axis to be 0 to 100
 myPlot8 + geom_point(aes(size=BudgetMillions)) + 
-  facet_grid(Genre~Year) +
   geom_smooth() +
+  facet_grid(Genre~Year) +
   ylim(0,100)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
